@@ -1,27 +1,24 @@
-// create a socket
-// bind the socket to the IP/port
-// mark the socket for listening in
-// accept a call
-// close the listening socket
-// while receiving display message, echo message
-// close the socket
+/********************************************
+ * This server.cpp file includes all logic
+ * behide server part of the network:
+ *          1. creating a socket
+ *          2. binding to IP and port
+ *          3. listenig for incoming messages
+ *          4. receiving messages
+ *          5. echoing messages
+ *          6. closing the socket
+ *          7. cleaning the memory
+*********************************************/
 
-#include <iostream>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <string.h>
-#include <string>
+#include "shared.h"
 
-int main() {
+void run_server() {
     // create a listening socket
     int listening = socket(AF_INET, SOCK_STREAM, 0);
     // check if the socket exists
     if (listening == -1) {
         std::cerr << "Can't create a socket";
-        return -1;
+        return;
     }
 
     // bind the socket to (any) IP/port
@@ -33,13 +30,13 @@ int main() {
     // check if bind command works
     if (bind(listening, (sockaddr*)&hint, sizeof(hint)) == -1) {
         std::cerr << "Can't bind to IP/port";
-        return -2;
+        return;
     }
 
     // make the socket as being able listening in
     if (listen(listening, SOMAXCONN) == -1) {
         std::cerr << "Can't listen";
-        return -3;
+        return;
     }
 
     // accept a call
@@ -52,7 +49,7 @@ int main() {
 
     if (client_socket == -1) {
         std::cerr << "Problem with client connecting";
-        return -4;
+        return;
     }
 
     // close the listening socket
@@ -96,6 +93,4 @@ int main() {
 
     // close the socket
     close(client_socket);
-
-    return 0;
 }
