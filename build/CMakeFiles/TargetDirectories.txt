@@ -1,4 +1,0 @@
-/home/mariia/c++/barebones_tcp_serves/build/CMakeFiles/server.dir
-/home/mariia/c++/barebones_tcp_serves/build/CMakeFiles/client.dir
-/home/mariia/c++/barebones_tcp_serves/build/CMakeFiles/edit_cache.dir
-/home/mariia/c++/barebones_tcp_serves/build/CMakeFiles/rebuild_cache.dir

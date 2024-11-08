@@ -19,8 +19,9 @@ void run_client() {
 
     // create a hint structure for the server we're connecting with
     int port = 54000;
-    // std::string ip_address = "127.0.0.1";
-    std::string ip_address = "0.0.0.0";
+    // std::string ip_address = "127.0.0.1"; // loop back
+    // std::string ip_address = "192.168.0.16";
+    std::string ip_address = "0.0.0.0"; // to be able to go in local network
 
     sockaddr_in hint;
     hint.sin_family = AF_INET;
