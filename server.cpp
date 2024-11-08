@@ -1,13 +1,12 @@
 /********************************************
  * This server.cpp file includes all logic
  * behide server part of the network:
- *          1. creating a socket
- *          2. binding to IP and port
- *          3. listenig for incoming messages
- *          4. receiving messages
- *          5. echoing messages
- *          6. closing the socket
- *          7. cleaning the memory
+ *  1. create a socket
+ *  2. bind the socket to the adress
+ *  3. listen for connection
+ *  4. accept the connection
+ *  5. receive and send messages
+ *  6. close the socket
 *********************************************/
 
 #include "shared.h"
@@ -39,6 +38,8 @@ void run_server() {
         return;
     }
 
+    std::cout << "\nWaiting the client to connect...\n" << std::endl;
+
     // accept a call
     sockaddr_in client;
     socklen_t client_size = sizeof(client);
@@ -62,11 +63,14 @@ void run_server() {
     int result = getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, svc, NI_MAXSERV, 0);
 
     if (result == 0) {
-        std::cout << host << " connected on " << svc << std::endl;
+        std::cout << std::endl << host << " connected on " << svc << std::endl << std::endl;
     } else {
         inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
-        std::cout << host << " connected on " << ntohs(client.sin_port) << std::endl;
+        std::cout << std::endl << host << " connected on " << ntohs(client.sin_port) << std::endl << std::endl;
     }
+
+    // just for fun, let keep track of the time
+    auto start = std::chrono::high_resolution_clock::now();
 
     // while receiving display message, echo message
     char buff[4096];
@@ -93,4 +97,11 @@ void run_server() {
 
     // close the socket
     close(client_socket);
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+    
+    std::cout << "\n*************** Session ***************" << std::endl;
+    std::cout << "Elapsed time: " << elapsed << " secs" << std::endl;
+    std::cout << "Connection closed..." << std::endl;
 }

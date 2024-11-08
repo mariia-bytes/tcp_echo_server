@@ -14,5 +14,6 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <string>
+#include <chrono> // for time tracking
 
 #endif // SHARED_H

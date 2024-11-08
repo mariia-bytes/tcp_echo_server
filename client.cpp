@@ -1,14 +1,13 @@
 /********************************************
  * This server.cpp file includes all logic
  * behide client part of the network:
- *          1. creating a socket
- *          2. binding to IP and port
- *          3. sending messages
- *          4. receiving echoed messages
- *          5. closing the socket
+ *  1. create a socket
+ *  2. bind the socket to the adress of the server
+ *  3. send and receive messages
+ *  4. close the socket
 *********************************************/
 
-#include "shared.h"
+#include "shared.h" 
 
 void run_client() {
     // create a socket
@@ -20,7 +19,8 @@ void run_client() {
 
     // create a hint structure for the server we're connecting with
     int port = 54000;
-    std::string ip_address = "127.0.0.1";
+    // std::string ip_address = "127.0.0.1";
+    std::string ip_address = "0.0.0.0";
 
     sockaddr_in hint;
     hint.sin_family = AF_INET;
@@ -33,6 +33,9 @@ void run_client() {
         std::cerr << "Can't connect to server";
         return;
     }
+    std::cout << "\nClient successful connected to the server\n" << std::endl;
+
+    auto start = std::chrono::high_resolution_clock::now();
 
     // while loop to send and receive data
     char buff[4096];
@@ -54,11 +57,18 @@ void run_client() {
             memset(buff, 0, 4096);
             int bytes_recv = recv(sock, buff, 4096, 0);
             if (bytes_recv > 0) {
-                std::cout << "SERVER> " << std::string(buff, 0, bytes_recv) << std::endl;
+                std::cout << "SERVER> " << std::string(buff, 0, bytes_recv) << std::endl << std::endl;
             }
         }
     } while(true);
 
     // close the socket
     close(sock);
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+
+    std::cout << "\n*************** Session ***************" << std::endl;
+    std::cout << "Elapsed time: " << elapsed << " secs" << std::endl;
+    std::cout << "Connection closed..." << std::endl;
 }
