@@ -16,4 +16,4 @@
 #include <string>
 #include <chrono> // for time tracking
 
-#endif // SHARED_H
+#endif // SHARED_
