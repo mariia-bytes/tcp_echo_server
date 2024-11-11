@@ -16,5 +16,5 @@ This TCP echo server implements a network application based on socket programmin
 4. cd build/
 5. cmake ..
 6. make
-7. ./server <PORT>
+7. ./server PORT
    ./client <IP PORT>
