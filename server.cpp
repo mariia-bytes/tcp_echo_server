@@ -1,8 +1,8 @@
 /********************************************
  * This server.cpp file includes all logic
- * behide server part of the network:
+ * behind server part of the network:
  *  1. create a socket
- *  2. bind the socket to the adress
+ *  2. bind the socket to the address
  *  3. listen for connection
  *  4. accept the connection
  *  5. receive and send messages
@@ -11,7 +11,8 @@
 
 #include "shared.h"
 
-void run_server() {
+// Change: Added an int port parameter to the run_server function
+void run_server(int port) {
     // create a listening socket
     int listening = socket(AF_INET, SOCK_STREAM, 0);
     // check if the socket exists
@@ -23,8 +24,8 @@ void run_server() {
     // bind the socket to (any) IP/port
     sockaddr_in hint;
     hint.sin_family = AF_INET;
-    hint.sin_port = htons(54000);
-    inet_pton(AF_INET, "0.0.0.0", &hint.sin_addr);
+    hint.sin_port = htons(port);  // Change: Use the port parameter instead of hardcoding the port number
+    hint.sin_addr.s_addr = INADDR_ANY;  // bind to any available network interface
 
     // check if bind command works
     if (bind(listening, (sockaddr*)&hint, sizeof(hint)) == -1) {
@@ -32,13 +33,13 @@ void run_server() {
         return;
     }
 
-    // make the socket as being able listening in
+    // make the socket as being able to listen
     if (listen(listening, SOMAXCONN) == -1) {
         std::cerr << "Can't listen";
         return;
     }
 
-    std::cout << "\nWaiting the client to connect...\n" << std::endl;
+    std::cout << "\nWaiting for client to connect...\n" << std::endl;
 
     // accept a call
     sockaddr_in client;
@@ -69,14 +70,14 @@ void run_server() {
         std::cout << std::endl << host << " connected on " << ntohs(client.sin_port) << std::endl << std::endl;
     }
 
-    // just for fun, let keep track of the time
+    // just for fun, let's keep track of the time
     auto start = std::chrono::high_resolution_clock::now();
 
     // while receiving display message, echo message
     char buff[4096];
     while (true) {
         // clear the buffer
-        memset(buff, 0 ,4096);
+        memset(buff, 0, 4096);
         // wait for the message
         int bytes_recv = recv(client_socket, buff, 4096, 0);
         if (bytes_recv == -1) {
@@ -84,7 +85,7 @@ void run_server() {
             break;
         }
         if (bytes_recv == 0) {
-            std::cout << "The client disconnected" << std::endl;
+            std::cout << "\nThe client's disconnected" << std::endl;
             break;
         }
 

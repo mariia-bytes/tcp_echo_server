@@ -1,14 +1,21 @@
 /************************************************
  * This server_main.cpp file includes executable
  * part for server.
- * A bit clumpsy way to handle the execution 
- * but I'LL DEAL WITH IT LATER
+ * The main function takes as a parameter 
+ * a port number for the  server to run.
 ************************************************/
 #include "shared.h"
 
-void run_server();
+void run_server(int port);
 
-int main() {
-    run_server();
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <Port>" << std::endl;
+        return 1;
+    }
+
+    int port = std::stoi(argv[1]);
+
+    run_server(port);
     return 0;
 }

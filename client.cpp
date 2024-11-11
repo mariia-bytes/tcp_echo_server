@@ -1,15 +1,15 @@
 /********************************************
- * This server.cpp file includes all logic
- * behide client part of the network:
+ * This client.cpp file includes all logic
+ * behind client part of the network:
  *  1. create a socket
- *  2. bind the socket to the adress of the server
+ *  2. connect the socket to the address of the server
  *  3. send and receive messages
  *  4. close the socket
 *********************************************/
 
 #include "shared.h" 
 
-void run_client() {
+void run_client(const std::string& ip_address, int port) {
     // create a socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1) {
@@ -18,11 +18,6 @@ void run_client() {
     }
 
     // create a hint structure for the server we're connecting with
-    int port = 54000;
-    // std::string ip_address = "127.0.0.1"; // loop back
-    // std::string ip_address = "192.168.0.16";
-    std::string ip_address = "0.0.0.0"; // to be able to go in local network
-
     sockaddr_in hint;
     hint.sin_family = AF_INET;
     hint.sin_port = htons(port);
@@ -34,7 +29,7 @@ void run_client() {
         std::cerr << "Can't connect to server";
         return;
     }
-    std::cout << "\nClient successful connected to the server\n" << std::endl;
+    std::cout << "\nClient successfully connected to the server\n" << std::endl;
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -61,10 +56,12 @@ void run_client() {
                 std::cout << "SERVER> " << std::string(buff, 0, bytes_recv) << std::endl << std::endl;
             }
         }
-    } while(true);
 
-    // close the socket
-    close(sock);
+        // check if the user wants to exit
+        if (user_input == "q") {
+            break;
+        }
+    } while (true);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
@@ -72,4 +69,7 @@ void run_client() {
     std::cout << "\n*************** Session ***************" << std::endl;
     std::cout << "Elapsed time: " << elapsed << " secs" << std::endl;
     std::cout << "Connection closed..." << std::endl;
+
+    // close the socket
+    close(sock);
 }
