@@ -1,4 +1,4 @@
-/********************************************
+/************************************************
  * This server.cpp file includes all logic
  * behind server part of the network:
  *  1. create a socket
@@ -7,11 +7,28 @@
  *  4. accept the connection
  *  5. receive and send messages
  *  6. close the socket
-*********************************************/
-
+ * 
+ * The main function takes as a parameter 
+ * a port number for the  server to run.
+************************************************/
 #include "shared.h"
 
-// Change: Added an int port parameter to the run_server function
+void run_server(int port);
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <Port>" << std::endl;
+        return 1;
+    }
+
+    int port = std::stoi(argv[1]);
+
+    run_server(port);
+    return 0;
+}
+
+
+
 void run_server(int port) {
     // create a listening socket
     int listening = socket(AF_INET, SOCK_STREAM, 0);
@@ -24,7 +41,7 @@ void run_server(int port) {
     // bind the socket to (any) IP/port
     sockaddr_in hint;
     hint.sin_family = AF_INET;
-    hint.sin_port = htons(port);  // Change: Use the port parameter instead of hardcoding the port number
+    hint.sin_port = htons(port);
     hint.sin_addr.s_addr = INADDR_ANY;  // bind to any available network interface
 
     // check if bind command works
