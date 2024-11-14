@@ -18,3 +18,7 @@ This TCP echo server implements a network application based on socket programmin
 6. make
 7. ./server &lt;PORT&gt; <br>
    ./client &lt;IP&gt; &lt;PORT&gt;
+
+---
+
+*This project began on November 4th, 2024*
